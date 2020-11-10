@@ -17,7 +17,7 @@ import java.util.Collections;
 @Controller
 public class TodoController {
 
-    String url = "http://localhost:8080/";
+    String url = "http://rest-api:8080/";
 
     private final RestTemplate restTemplate;
 

@@ -15,7 +15,7 @@ import java.util.List;
 @Controller
 public class IndexController {
 
-    String url = "http://localhost:8080/";
+    String url = "http://rest-api:8080/";
 
     private final RestTemplate restTemplate;
 
