@@ -1,5 +1,6 @@
 package pl.pitera.web.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +18,8 @@ import java.util.Collections;
 @Controller
 public class TodoController {
 
-    String url = "http://rest-api:8080/";
+    @Value("${api.url}")
+    private String apiUrl;
 
     private final RestTemplate restTemplate;
 
@@ -33,7 +35,7 @@ public class TodoController {
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable int id, Model model) {
 
-        ResponseEntity<Todo> entity = restTemplate.exchange(url + "todos/" + id,
+        ResponseEntity<Todo> entity = restTemplate.exchange(apiUrl + "todos/" + id,
                 HttpMethod.GET,
                 HttpEntity.EMPTY,
                 Todo.class);
@@ -49,12 +51,10 @@ public class TodoController {
         if (bindingResult.hasErrors())
             return "edit";
 
-
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         HttpEntity<Todo> entity = new HttpEntity<Todo>(todo, headers);
-        restTemplate.exchange(url + "todos/" + todo.getId(), HttpMethod.PUT, entity, Todo.class);
-
+        restTemplate.exchange(apiUrl + "todos/" + todo.getId(), HttpMethod.PUT, entity, Todo.class);
 
         return "redirect:/";
     }
@@ -70,7 +70,7 @@ public class TodoController {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         HttpEntity<Todo> entity = new HttpEntity<Todo>(todo, headers);
-        restTemplate.exchange(url + "todos/" + id, HttpMethod.PUT, entity, Todo.class);
+        restTemplate.exchange(apiUrl + "todos/" + id, HttpMethod.PUT, entity, Todo.class);
 
         return "redirect:/";
     }
@@ -78,7 +78,7 @@ public class TodoController {
     @GetMapping("/remove/{id}")
     public String remove(@PathVariable int id) {
 
-        restTemplate.exchange(url + "todos/" + id,
+        restTemplate.exchange(apiUrl + "todos/" + id,
                 HttpMethod.DELETE,
                 HttpEntity.EMPTY,
                 String.class);
@@ -100,7 +100,7 @@ public class TodoController {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         HttpEntity<Todo> entity = new HttpEntity<Todo>(todo, headers);
-        restTemplate.exchange(url + "todos", HttpMethod.POST, entity, Todo.class);
+        restTemplate.exchange(apiUrl + "todos", HttpMethod.POST, entity, Todo.class);
 
 
         return "redirect:/";

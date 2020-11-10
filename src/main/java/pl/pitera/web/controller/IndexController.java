@@ -1,6 +1,8 @@
 package pl.pitera.web.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +17,8 @@ import java.util.List;
 @Controller
 public class IndexController {
 
-    String url = "http://rest-api:8080/";
+    @Value("${api.url}")
+    private String apiUrl;
 
     private final RestTemplate restTemplate;
 
@@ -26,7 +29,7 @@ public class IndexController {
     @GetMapping("/")
     public String getIndexPage(Model model) {
 
-        ResponseEntity<List<Todo>> entity = restTemplate.exchange(url + "todos",
+        ResponseEntity<List<Todo>> entity = restTemplate.exchange(apiUrl + "todos",
                 HttpMethod.GET,
                 HttpEntity.EMPTY,
                 new ParameterizedTypeReference<List<Todo>>() {
